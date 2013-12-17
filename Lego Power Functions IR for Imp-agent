@@ -1,0 +1,27 @@
+/*PWM speed steps
+ 
+ PWM float            = 0
+ PWM forward speed 1 -> 7  = 1 -> 7
+ PWM break            = 8
+ PWM reverse speed 9 -> F  = 7 -> 1
+ 
+*/
+
+server.log("Start motor: " + http.agenturl() + "?chn=1&col=0&pwm=7");
+ 
+function requestHandler(request, response) {
+  try {
+			
+		code <- request.query.chn + request.query.col + request.query.pwm ;
+		device.send("PWMCODE", code);
+
+		response.send(200, "OK");
+		} 
+	catch (ex) {
+	response.send(500, "Internal Server Error: " + ex);
+	}
+
+}
+
+// register the HTTP handler
+http.onrequest(requestHandler);
